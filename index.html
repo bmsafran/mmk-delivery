@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>M.M.K TRADING LLC - Live Delivery ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- GOOGLE FIREBASE OFFICIAL SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- HTML2PDF LIBRARY -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    @page { size: A4 portrait; margin: 4mm 6mm; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #ffffff !important; padding: 0 !important; }
+      #driverMobileLayout { display: none !important; }
+      #adminTableLayout { display: block !important; }
+      .sheet-container { border: 2px solid #000 !important; box-shadow: none !important; width: 100% !important; padding: 4px !important; }
+      table, th, td { border-color: #000 !important; }
+      .print-tight { padding-top: 1px !important; padding-bottom: 1px !important; line-height: 1.1 !important; }
+      select { appearance: none; -webkit-appearance: none; border: none !important; }
+      #sheetLogoBox { border: none !important; }
+    }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-900 min-h-screen">
+
+  <!-- ======================== 1. PIN LOGIN SCREEN ======================== -->
+  <div id="pinLoginScreen" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center space-y-4">
+      <div id="pinLogoBox" class="w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-2xl shadow-md overflow-hidden">
+        MMK
+      </div>
+      <div>
+        <h2 id="pinCompanyName" class="font-black text-lg text-slate-950 tracking-wide">M.M.K TRADING LLC</h2>
+        <p class="text-xs text-slate-500 font-semibold">Live Wholesale Delivery ERP</p>
+      </div>
+
+      <div class="w-full border-t border-slate-100 pt-2">
+        <p class="text-xs font-bold text-slate-800">Ungal PIN Ennai Ullidavum</p>
+        <p class="text-[10px] text-slate-400">Driver / Boss / Admin PIN</p>
+      </div>
+
+      <div class="flex items-center justify-center space-x-3 py-2 bg-slate-50 border border-slate-200 rounded-2xl w-full">
+        <div id="dot1" class="w-3.5 h-3.5 rounded-full bg-slate-300 transition-all"></div>
+        <div id="dot2" class="w-3.5 h-3.5 rounded-full bg-slate-300 transition-all"></div>
+        <div id="dot3" class="w-3.5 h-3.5 rounded-full bg-slate-300 transition-all"></div>
+        <div id="dot4" class="w-3.5 h-3.5 rounded-full bg-slate-300 transition-all"></div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2.5 w-full pt-1 font-mono">
+        <button onclick="pressPinKey('1')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">1</button>
+        <button onclick="pressPinKey('2')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">2</button>
+        <button onclick="pressPinKey('3')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">3</button>
+        <button onclick="pressPinKey('4')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">4</button>
+        <button onclick="pressPinKey('5')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">5</button>
+        <button onclick="pressPinKey('6')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">6</button>
+        <button onclick="pressPinKey('7')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">7</button>
+        <button onclick="pressPinKey('8')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">8</button>
+        <button onclick="pressPinKey('9')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">9</button>
+        <button onclick="clearPinKey()" class="h-12 bg-rose-50 active:bg-rose-100 border border-rose-200 text-rose-600 rounded-xl text-xs font-black shadow-sm">Clear</button>
+        <button onclick="pressPinKey('0')" class="h-12 bg-slate-50 active:bg-slate-200 border border-slate-200 text-slate-900 rounded-xl text-lg font-bold shadow-sm">0</button>
+        <button onclick="submitPinKey()" class="h-12 bg-emerald-600 active:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-sm flex items-center justify-center">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-2.5 text-left text-[11px] text-slate-600 font-medium">
+        <span class="font-bold text-slate-900 block mb-1">🔑 PIN LIST:</span>
+        <div class="grid grid-cols-2 gap-1 font-mono">
+          <div>• Roofy: <strong class="text-indigo-900">1111</strong></div>
+          <div>• Riyas: <strong class="text-indigo-900">2222</strong></div>
+          <div>• Farhan: <strong class="text-indigo-900">3333</strong></div>
+          <div>• Shafran: <strong class="text-indigo-900">4444</strong></div>
+          <div>• Kamal: <strong class="text-indigo-900">5555</strong></div>
+          <div>• Boss: <strong class="text-amber-600">7777</strong></div>
+          <div class="col-span-2 text-blue-700 font-bold">• Admin: 9999</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== 2. APP WORKSPACE ======================== -->
+  <div id="mainWorkspace" class="hidden min-h-screen bg-slate-100 pb-36">
+
+    <header class="no-print sticky top-0 z-40 bg-slate-950 text-white p-3 shadow-md border-b border-slate-800">
+      <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white font-black flex items-center justify-center text-sm">M</div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <h1 class="font-black text-sm leading-tight" id="topCompanyTitle">M.M.K TRADING</h1>
+              <span id="liveStatusBadge" class="bg-emerald-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold flex items-center space-x-1 shadow">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                <span>CLOUD LIVE</span>
+              </span>
+            </div>
+            <p class="text-[10px] text-slate-400" id="headerSubUser">System</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-1.5">
+          <button id="btnBossSummaryTrigger" onclick="openBossSummaryModal()" class="hidden bg-amber-400 hover:bg-amber-500 text-slate-950 font-black px-2.5 py-1.5 rounded-xl text-xs shadow flex items-center space-x-1">
+            <i class="fa-solid fa-crown"></i><span class="hidden sm:inline">BOSS</span>
+          </button>
+          
+          <button id="btnSwitchView" onclick="toggleAdminViewMode()" class="hidden bg-indigo-700 hover:bg-indigo-600 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs flex items-center space-x-1">
+            <i class="fa-solid fa-table-columns"></i><span id="viewModeLabel">Table</span>
+          </button>
+
+          <button onclick="downloadPdfDirectOnly()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs border border-slate-700 flex items-center space-x-1" title="Download PDF File">
+            <i class="fa-solid fa-download text-amber-400"></i>
+            <span class="text-[11px]">PDF</span>
+          </button>
+
+          <button onclick="logoutSession()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs flex items-center space-x-1" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ADMIN TOOLBAR -->
+    <div id="adminToolbar" class="no-print max-w-5xl mx-auto m-3 hidden">
+      <div class="bg-indigo-950 text-white p-3 rounded-2xl shadow-md border border-indigo-800 space-y-2">
+        <div class="flex items-center justify-between border-b border-indigo-800 pb-2">
+          <div class="flex items-center space-x-2">
+            <span class="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded">ADMIN PANEL</span>
+            <span class="text-xs text-indigo-200 font-bold">Office Controls & Management</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <select id="routeDropdown" onchange="switchCurrentRoute(this.value)" class="bg-slate-900 text-amber-300 font-bold text-xs px-2.5 py-1 rounded-lg border border-slate-700 outline-none"></select>
+            <select id="tripDropdown" onchange="switchCurrentTrip(this.value)" class="bg-slate-900 text-emerald-300 font-bold text-xs px-2.5 py-1 rounded-lg border border-slate-700 outline-none">
+              <option value="trip1">Trip 1</option>
+              <option value="trip2">Trip 2</option>
+              <option value="trip3">Trip 3</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 text-xs font-bold pt-1">
+          <button onclick="openAdminAddShopDirectModal()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 px-3 py-1.5 rounded-xl shadow flex items-center space-x-1">
+            <i class="fa-solid fa-circle-plus"></i><span>+ Add Shop</span>
+          </button>
+          <button onclick="openNewSheetModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl shadow flex items-center space-x-1">
+            <i class="fa-solid fa-file-circle-plus"></i><span>+ New Day Sheet</span>
+          </button>
+          <button onclick="openShopManagerModal()" class="bg-indigo-700 hover:bg-indigo-600 text-white px-2.5 py-1.5 rounded-xl flex items-center space-x-1 border border-indigo-500">
+            <i class="fa-solid fa-store"></i><span>Shop Master</span>
+          </button>
+          <button onclick="openRouteManagerModal()" class="bg-indigo-700 hover:bg-indigo-600 text-white px-2.5 py-1.5 rounded-xl flex items-center space-x-1 border border-indigo-500">
+            <i class="fa-solid fa-route"></i><span>Routes</span>
+          </button>
+          <button onclick="openFleetModal()" class="bg-indigo-700 hover:bg-indigo-600 text-white px-2.5 py-1.5 rounded-xl flex items-center space-x-1 border border-indigo-500">
+            <i class="fa-solid fa-truck"></i><span>Drivers & Fleet</span>
+          </button>
+          <button onclick="openCompanyProfileModal()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-xl flex items-center space-x-1">
+            <i class="fa-solid fa-building"></i><span>Company & Logo</span>
+          </button>
+          <button onclick="openHistoryModal()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-xl flex items-center space-x-1">
+            <i class="fa-solid fa-clock-rotate-left"></i><span>History</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== DRIVER MOBILE CARD VIEW ==================== -->
+    <div id="driverMobileLayout" class="max-w-md mx-auto p-3 space-y-3">
+      
+      <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-3.5 shadow-md flex items-center justify-between">
+        <div>
+          <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-black">ACTIVE ROUTE</span>
+          <h2 class="text-base font-black uppercase" id="mRouteDisplay">CHIBA / TOKYO</h2>
+          <p class="text-xs text-slate-300 font-medium" id="mDateDisplay">October 15, 2026</p>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block font-bold">DRIVER / VEHICLE</span>
+          <span class="text-xs font-black text-white bg-slate-800 px-2 py-0.5 rounded" id="mDriverDisplay">ROOFY</span>
+          <span class="text-[11px] text-emerald-300 block font-bold mt-0.5" id="mVehicleDisplay">CARAVAN</span>
+        </div>
+      </div>
+
+      <!-- DYNAMIC TRIP ACTION BOX -->
+      <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 flex items-center justify-between">
+        <div class="text-xs space-y-0.5">
+          <div class="flex items-center space-x-1 text-slate-500 font-semibold text-[10px]">
+            <span>START:</span>
+            <strong class="font-mono text-slate-900 text-xs" id="mTimeDeparture">--:--</strong>
+          </div>
+          <div class="flex items-center space-x-1 text-slate-500 font-semibold text-[10px]">
+            <span>END:</span>
+            <strong class="font-mono text-rose-700 text-xs" id="mTimeReturn">--:--</strong>
+          </div>
+        </div>
+        
+        <div id="tripActionBtnContainer">
+          <button onclick="handleTripToggle()" id="btnTripToggle" class="bg-blue-600 active:scale-95 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow flex items-center space-x-1.5 transition-all">
+            <i class="fa-solid fa-play text-xs"></i>
+            <span id="btnTripToggleText">START TRIP</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-1">
+        <h3 class="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center space-x-1">
+          <i class="fa-solid fa-store text-emerald-600"></i>
+          <span>DELIVERY STOPS</span>
+        </h3>
+        <div class="flex items-center space-x-1.5">
+          <button onclick="downloadPdfDirectOnly()" class="text-[11px] font-black bg-indigo-100 text-indigo-900 border border-indigo-300 px-2.5 py-1 rounded-lg active:scale-95 shadow-sm flex items-center space-x-1">
+            <i class="fa-solid fa-file-pdf"></i><span>PDF</span>
+          </button>
+          <button onclick="openDriverExtraShopModal()" class="text-[11px] font-black bg-amber-400 text-slate-950 px-2.5 py-1 rounded-lg active:scale-95 shadow">
+            + Extra Stop
+          </button>
+        </div>
+      </div>
+
+      <div id="mobileStopsList" class="space-y-3"></div>
+
+      <!-- COMPLETED STOPS -->
+      <div class="pt-2">
+        <button onclick="toggleCompletedSection()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-black text-xs p-3 rounded-2xl flex items-center justify-between transition shadow-sm">
+          <span class="flex items-center space-x-2">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span>COMPLETED STOPS (Mudindha Kadaigal)</span>
+            <span id="completedBadgeCount" class="bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded-full ml-1 font-bold">0</span>
+          </span>
+          <i id="completedChevron" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+        </button>
+        <div id="completedStopsFeed" class="hidden space-y-2 mt-2"></div>
+      </div>
+
+      <!-- EXPENSES -->
+      <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 space-y-2.5">
+        <div class="flex items-center justify-between border-b pb-2">
+          <span class="text-xs font-black text-slate-800 uppercase flex items-center space-x-1">
+            <i class="fa-solid fa-gas-pump text-amber-500"></i>
+            <span>Driver Expenses (Selavugal)</span>
+          </span>
+          <span class="text-xs font-mono font-black text-rose-600" id="mTotalExpensesLabel">¥0</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 block">Diesel</label>
+            <input type="number" id="mExpDiesel" oninput="syncMobileFinancials()" placeholder="0" class="w-full font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-900">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 block">Food</label>
+            <input type="number" id="mExpFood" oninput="syncMobileFinancials()" placeholder="0" class="w-full font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-900">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 block">Highway Charge</label>
+            <input type="number" id="mExpHighway" oninput="syncMobileFinancials()" placeholder="0" class="w-full font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-900">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 block">Stemp / Copy</label>
+            <input type="number" id="mExpStamp" oninput="syncMobileFinancials()" placeholder="0" class="w-full font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-900">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 block">Other Expenses</label>
+            <input type="number" id="mExpOther" oninput="syncMobileFinancials()" placeholder="0" class="w-full font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-900">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 block">OT (NAGOYA / OSAKA)</label>
+            <input type="number" id="mExpOT" oninput="syncMobileFinancials()" placeholder="0" class="w-full font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2 text-slate-900">
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-3xl space-y-2.5 shadow-sm">
+        <span class="text-xs font-black text-emerald-950 block text-center uppercase tracking-wide">
+          📤 Finish Run & Send Statement
+        </span>
+        <button onclick="downloadPdfDirectOnly()" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-black py-3 rounded-2xl text-xs flex items-center justify-center space-x-2 shadow">
+          <i class="fa-solid fa-file-arrow-down text-amber-400 text-base"></i>
+          <span id="btnPdfText">1. DOWNLOAD PDF SLIP</span>
+        </button>
+        <button onclick="shareWhatsAppDirectOnly()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black py-3 rounded-2xl text-xs flex items-center justify-center space-x-2 shadow">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+          <span>2. SEND WHATSAPP TEXT</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ==================== ADMIN TABLE VIEW ==================== -->
+    <div id="adminTableLayout" class="hidden max-w-5xl mx-auto p-2 sm:p-4">
+      <main id="officialRunSheetPrintArea" class="sheet-container bg-white border-2 border-slate-900 rounded-xl p-4 space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 border-b-2 border-slate-900 pb-3">
+          <div class="flex items-center space-x-3">
+            <div id="sheetLogoBox" class="w-16 h-16 flex items-center justify-center bg-transparent">
+              <span class="text-3xl font-black text-emerald-700 tracking-tighter">MMK</span>
+            </div>
+            <div>
+              <h2 id="sheetCompanyName" class="text-base font-black tracking-wide leading-tight">M.M.K TRADING LLC</h2>
+              <p id="sheetCompanyZip" class="text-xs text-slate-600 font-medium">〒289-1204</p>
+              <p id="sheetCompanyAddress" class="text-xs text-slate-600 font-medium">313-1 Toda, Sammu, Chiba.</p>
+              <p id="sheetCompanyPhone" class="text-xs text-slate-800 font-bold mt-0.5"><i class="fa-solid fa-phone mr-1"></i>TEL: 080 4862 3344</p>
+            </div>
+          </div>
+          <div class="text-[11px] border border-slate-900 rounded overflow-hidden">
+            <table class="w-full border-collapse">
+              <tbody>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold w-1/3 border-r border-slate-900">ROUTE NAME</th>
+                  <td class="p-0.5"><input type="text" id="metaRouteName" class="w-full font-bold uppercase outline-none px-1 bg-transparent" readonly></td>
+                </tr>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">DATE</th>
+                  <td class="p-0.5"><input type="text" id="metaDate" class="w-full font-semibold outline-none px-1 bg-transparent" onchange="updateMeta('date', this.value)"></td>
+                </tr>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">TIME</th>
+                  <td class="p-0.5"><input type="text" id="metaTime" class="w-full font-mono outline-none px-1 bg-transparent" onchange="updateMeta('time', this.value)"></td>
+                </tr>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">RETURNED DATE</th>
+                  <td class="p-0.5"><input type="text" id="metaReturnDate" class="w-full font-mono outline-none px-1 bg-transparent" onchange="updateMeta('returnDate', this.value)"></td>
+                </tr>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">RETURNED TIME</th>
+                  <td class="p-0.5"><input type="text" id="metaReturnTime" class="w-full font-mono outline-none px-1 bg-transparent" onchange="updateMeta('returnTime', this.value)"></td>
+                </tr>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">DRIVER NAME</th>
+                  <td class="p-0.5"><select id="metaDriverSelect" onchange="updateMeta('driver', this.value)" class="w-full font-black text-slate-900 bg-transparent outline-none"></select></td>
+                </tr>
+                <tr class="border-b border-slate-900">
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">ASSISTANT</th>
+                  <td class="p-0.5"><input type="text" id="metaAssistant" class="w-full font-bold uppercase outline-none px-1 bg-transparent" onchange="updateMeta('assistant', this.value)"></td>
+                </tr>
+                <tr>
+                  <th class="bg-slate-100 p-1 text-left font-bold border-r border-slate-900">VEHICLE</th>
+                  <td class="p-0.5"><select id="metaVehicleSelect" onchange="updateMeta('vehicle', this.value)" class="w-full font-semibold text-slate-900 bg-transparent outline-none"></select></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse border-2 border-slate-900 text-xs text-left">
+            <thead class="bg-[#1b4f72] text-white text-[11px] uppercase">
+              <tr>
+                <th class="p-1 border border-slate-700 text-center w-8">NO</th>
+                <th class="p-1 border border-slate-700">SHOP NAME</th>
+                <th class="p-1 border border-slate-700 text-center w-16">IN TIME</th>
+                <th class="p-1 border border-slate-700 text-center w-16">OUT TIME</th>
+                <th class="p-1 border border-slate-700 text-right w-24">INVOICE AMOUNT</th>
+                <th class="p-1 border border-slate-700 text-right w-16">DISCOUNT</th>
+                <th class="p-1 border border-slate-700 text-right w-24">TOTAL AMOUNT</th>
+                <th class="p-1 border border-slate-700 text-right w-24 bg-rose-900/60 text-white font-black">B/L (BALANCE)</th>
+                <th class="p-1 border border-slate-700 text-center w-10 no-print pdf-hide">ACT</th>
+              </tr>
+            </thead>
+            <tbody id="adminShopsTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
+            <tfoot class="bg-slate-100 border-t-2 border-slate-900 font-black font-mono text-[11px]">
+              <tr>
+                <td colspan="4" class="p-1 text-right uppercase border border-slate-400">TOTAL:</td>
+                <td id="admTotalInvoice" class="p-1 text-right border border-slate-400">¥0</td>
+                <td id="admTotalDiscount" class="p-1 text-right border border-slate-400">¥0</td>
+                <td id="admTotalCollected" class="p-1 text-right border border-slate-400 text-emerald-800">¥0</td>
+                <td id="admTotalBalance" class="p-1 text-right border border-slate-400 text-rose-700">¥0</td>
+                <td class="p-1 border border-slate-400 text-slate-500 font-sans text-[10px] text-center no-print pdf-hide"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- SUMMARY & EXPENSES -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="border-2 border-slate-900 rounded p-2 text-xs">
+            <span class="font-black block uppercase mb-1 bg-[#1b4f72] text-white p-1 rounded">Expenses</span>
+            <div class="space-y-1 font-mono">
+              <div class="flex justify-between border-b pb-0.5"><span>Diesel:</span><span id="expD_val">¥0</span></div>
+              <div class="flex justify-between border-b pb-0.5"><span>Food:</span><span id="expF_val">¥0</span></div>
+              <div class="flex justify-between border-b pb-0.5"><span>Highway Charge:</span><span id="expH_val">¥0</span></div>
+              <div class="flex justify-between border-b pb-0.5"><span>Stemp / Copy:</span><span id="expS_val">¥0</span></div>
+              <div class="flex justify-between border-b pb-0.5"><span>Other Expenses:</span><span id="expO_val">¥0</span></div>
+              <div class="flex justify-between border-b pb-0.5"><span>OT (NAGOYA / OSAKA):</span><span id="expOT_val">¥0</span></div>
+              <div class="flex justify-between font-bold pt-1 text-rose-700"><span>Total Expenses:</span><strong id="admTotalExpDisplay">¥0</strong></div>
+            </div>
+          </div>
+          <div class="border-2 border-slate-900 rounded p-3 text-xs bg-slate-50 flex flex-col justify-between">
+            <div>
+              <span class="font-black block uppercase mb-2">Cash Settlement</span>
+              <div class="flex justify-between font-mono"><span>Total Collected:</span><strong id="admSettleCash" class="text-emerald-700">¥0</strong></div>
+              <div class="flex justify-between font-mono text-rose-600"><span>(-) Total Expenses:</span><strong id="admSettleExp">¥0</strong></div>
+              <div class="border-t border-slate-900 mt-2 pt-1 flex justify-between font-black text-sm"><span>NET CASH HANDOVER:</span><span id="admSettleNet2" class="bg-amber-300 px-1 rounded font-mono">¥0</span></div>
+            </div>
+            <div class="pt-6 text-center border-t border-slate-400 mt-4">
+              <div class="border-b border-slate-900 w-3/4 mx-auto mb-1"></div>
+              <span class="font-bold text-slate-800 text-[11px]">Approved By</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- DRIVER BOTTOM BAR -->
+    <div id="driverBottomBar" class="no-print fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md text-white border-t border-slate-800 p-3 z-40">
+      <div class="max-w-md mx-auto flex items-center justify-between">
+        <div>
+          <span class="text-[10px] text-slate-400 block font-bold uppercase">NET CASH HANDOVER</span>
+          <span class="text-lg font-black font-mono text-amber-400" id="mNetHandoverBottom">¥0</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block font-bold">COLLECTED: <strong class="text-emerald-400 font-mono" id="mTotalCashBottom">¥0</strong></span>
+          <span class="text-[10px] text-slate-400 block font-bold">EXPENSES: <strong class="text-rose-400 font-mono" id="mTotalExpBottom">¥0</strong></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DIRECT ADD SHOP MODAL -->
+  <div id="modalAdminAddShopDirect" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+      <h3 class="font-black text-slate-900 text-sm border-b pb-2">+ Add Shop to Current Sheet</h3>
+      <div>
+        <label class="text-xs font-bold text-slate-700">Shop Name</label>
+        <input type="text" id="admNewShopName" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 mt-1 font-bold" placeholder="e.g. AICHI SPICE">
+      </div>
+      <div>
+        <label class="text-xs font-bold text-slate-700">Address / Location</label>
+        <input type="text" id="admNewShopAddress" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 mt-1" placeholder="City / Code">
+      </div>
+      <div>
+        <label class="text-xs font-bold text-slate-700">Invoice Amount (¥)</label>
+        <input type="number" id="admNewShopInvoice" class="w-full text-xs font-mono font-bold border border-slate-300 rounded-xl p-2.5 mt-1" placeholder="0">
+      </div>
+      <div class="flex space-x-2 pt-2">
+        <button onclick="closeAdminAddShopDirectModal()" class="flex-1 bg-slate-100 py-2.5 rounded-xl text-xs font-bold">Cancel</button>
+        <button onclick="saveAdminAddShopDirect()" class="flex-1 bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs">Add to Sheet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVOICE VIEWER MODAL -->
+  <div id="modalInvoiceViewer" class="fixed inset-0 bg-black/85 z-50 backdrop-blur-md hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-4 shadow-2xl flex flex-col space-y-3 max-h-[90vh]">
+      <div class="flex items-center justify-between border-b pb-2">
+        <div>
+          <h3 class="font-black text-slate-950 text-sm" id="ivShopTitle">Shop Invoice</h3>
+          <p id="ivShopSub" class="text-[11px] text-slate-500 font-semibold"></p>
+        </div>
+        <button onclick="closeInvoiceViewerModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold flex items-center justify-center">✕</button>
+      </div>
+      <div id="ivUploadBox" class="bg-slate-50 border-2 border-dashed border-indigo-300 rounded-xl p-3 text-center space-y-1">
+        <p class="text-xs font-bold text-indigo-900">Upload Invoice (PDF or Photo)</p>
+        <input type="file" id="ivFileInput" accept="image/*,.pdf" onchange="handleInvoiceFileUpload(event)" class="text-xs text-slate-600 mt-1 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white">
+      </div>
+      <div id="ivPreviewContainer" class="flex-1 min-h-[250px] bg-slate-100 rounded-xl overflow-auto border border-slate-300 flex items-center justify-center p-2"></div>
+      <button onclick="closeInvoiceViewerModal()" class="w-full bg-slate-900 text-white font-bold py-2 rounded-xl text-xs">Close</button>
+    </div>
+  </div>
+
+  <!-- EXTRA SHOP MODAL -->
+  <div id="modalDriverExtra" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+      <h3 class="font-black text-slate-900 text-sm border-b pb-2">+ Add Extra Shop</h3>
+      <div><label class="text-xs font-bold text-slate-700">Shop Name</label><input type="text" id="driverExtraName" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 mt-1 font-bold"></div>
+      <div><label class="text-xs font-bold text-slate-700">Address / Location</label><input type="text" id="driverExtraAddress" class="w-full text-xs border border-slate-300 rounded-xl p-2.5 mt-1"></div>
+      <div><label class="text-xs font-bold text-slate-700">Bill Amount (¥)</label><input type="number" id="driverExtraInvoice" class="w-full text-xs font-mono font-bold border border-slate-300 rounded-xl p-2.5 mt-1" placeholder="0"></div>
+      <div class="flex space-x-2 pt-2">
+        <button onclick="closeDriverExtraShopModal()" class="flex-1 bg-slate-100 py-2.5 rounded-xl text-xs font-bold">Cancel</button>
+        <button onclick="confirmDriverExtraShop()" class="flex-1 bg-amber-400 font-black py-2.5 rounded-xl text-xs">Add Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOSS SUMMARY MODAL -->
+  <div id="modalBossSummary" class="fixed inset-0 bg-black/80 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-3xl rounded-3xl p-5 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h3 class="font-black text-slate-900 text-base">👑 BOSS EXECUTIVE FINANCIAL SUMMARY</h3>
+        <button onclick="closeBossSummaryModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold flex items-center justify-center">✕</button>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3"><p class="text-[10px] font-bold text-blue-900">SALE</p><p id="bossKpiSale" class="text-base font-black text-blue-950 font-mono">¥0</p></div>
+        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3"><p class="text-[10px] font-bold text-rose-900">B/L (LOAN)</p><p id="bossKpiLoan" class="text-base font-black text-rose-950 font-mono">¥0</p></div>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3"><p class="text-[10px] font-bold text-amber-900">SELAVU</p><p id="bossKpiSelavu" class="text-base font-black text-amber-950 font-mono">¥0</p></div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3"><p class="text-[10px] font-bold text-emerald-900">CASH HAND</p><p id="bossKpiCashHand" class="text-base font-black text-emerald-950 font-mono">¥0</p></div>
+      </div>
+      <table class="w-full text-xs text-left border rounded-xl overflow-hidden">
+        <thead class="bg-slate-900 text-white"><tr><th class="p-2">Route</th><th class="p-2">Driver</th><th class="p-2 text-right">Sale</th><th class="p-2 text-right">Expenses</th><th class="p-2 text-right">Handover</th></tr></thead>
+        <tbody id="bossBreakdownTableBody" class="divide-y font-mono"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROUTE, SHOP, FLEET MODALS -->
+  <div id="modalRouteManager" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h3 class="font-black text-slate-900 text-sm">Route Master</h3>
+        <button onclick="closeRouteManagerModal()" class="text-slate-400 font-bold">✕</button>
+      </div>
+      <div class="flex space-x-2">
+        <input type="text" id="newRouteName" placeholder="New Route Name" class="flex-1 text-xs p-2 rounded-xl border uppercase font-bold">
+        <button onclick="createNewRoute()" class="bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-xl">Add</button>
+      </div>
+      <div id="routeManagerList" class="space-y-1.5 pt-2"></div>
+    </div>
+  </div>
+
+  <div id="modalShopManager" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-5 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h3 class="font-black text-slate-900 text-sm">Shop Master Database</h3>
+        <button onclick="closeShopManagerModal()" class="text-slate-400 font-bold">✕</button>
+      </div>
+      <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-2xl border">
+        <input type="text" id="mShopName" placeholder="Shop Name" class="text-xs p-2 rounded-xl border col-span-2 font-bold">
+        <input type="text" id="mShopAddress" placeholder="Address / Location" class="text-xs p-2 rounded-xl border">
+        <input type="number" id="mShopInvoice" placeholder="Default Bill (¥)" class="text-xs p-2 rounded-xl border font-bold">
+        <select id="mShopRouteKey" class="text-xs p-2 rounded-xl border font-bold col-span-2"></select>
+        <button onclick="createMasterShop()" class="bg-emerald-600 text-white text-xs font-bold py-2 rounded-xl col-span-2">Save to Master</button>
+      </div>
+      <div id="shopManagerList" class="space-y-1.5 pt-2"></div>
+    </div>
+  </div>
+
+  <div id="modalFleet" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-5 shadow-2xl space-y-3 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h3 class="font-black text-slate-900 text-sm">Drivers & Fleet Master</h3>
+        <button onclick="closeFleetModal()" class="text-slate-400 font-bold">✕</button>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-indigo-50 p-2.5 rounded-2xl space-y-2">
+          <span class="text-xs font-black text-indigo-900 block">Drivers</span>
+          <div class="flex space-x-1">
+            <input type="text" id="newFleetDriverName" placeholder="Name" class="w-full text-xs p-1.5 rounded-lg border uppercase font-bold">
+            <button onclick="addFleetDriver()" class="bg-indigo-700 text-white text-xs font-bold px-2 py-1 rounded-lg">Add</button>
+          </div>
+          <div id="fleetDriverList" class="space-y-1"></div>
+        </div>
+        <div class="bg-emerald-50 p-2.5 rounded-2xl space-y-2">
+          <span class="text-xs font-black text-emerald-900 block">Vehicles</span>
+          <div class="flex space-x-1">
+            <input type="text" id="newFleetVehicleName" placeholder="Vehicle" class="w-full text-xs p-1.5 rounded-lg border uppercase font-bold">
+            <button onclick="addFleetVehicle()" class="bg-emerald-700 text-white text-xs font-bold px-2 py-1 rounded-lg">Add</button>
+          </div>
+          <div id="fleetVehicleList" class="space-y-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalCompanyProfile" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h3 class="font-black text-slate-900 text-sm">Company Profile & Logo</h3>
+        <button onclick="closeCompanyProfileModal()" class="text-slate-400 font-bold">✕</button>
+      </div>
+      <div><label class="text-[10px] font-bold text-slate-500">Company Name</label><input type="text" id="cpName" class="w-full text-xs border rounded-xl p-2 font-bold"></div>
+      <div><label class="text-[10px] font-bold text-slate-500">Zip Code</label><input type="text" id="cpZip" class="w-full text-xs border rounded-xl p-2"></div>
+      <div><label class="text-[10px] font-bold text-slate-500">Address</label><input type="text" id="cpAddress" class="w-full text-xs border rounded-xl p-2"></div>
+      <div><label class="text-[10px] font-bold text-slate-500">Phone</label><input type="text" id="cpPhone" class="w-full text-xs border rounded-xl p-2 font-bold"></div>
+      <div><label class="text-[10px] font-bold text-slate-500">Upload Logo</label><input type="file" id="cpLogoFile" accept="image/*" onchange="handleLogoUpload(event)" class="w-full text-xs border rounded-xl p-1.5"></div>
+      <button onclick="saveCompanyProfile()" class="w-full bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-xl shadow">Save</button>
+    </div>
+  </div>
+
+  <!-- NEW SHEET MODAL -->
+  <div id="modalNewSheet" class="fixed inset-0 bg-black/70 z-50 backdrop-blur-sm hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+      <h3 class="font-black text-slate-900 text-sm border-b pb-2">Create Fresh Daily Sheet</h3>
+      <div><label class="text-xs font-bold text-slate-700">Date</label><input type="text" id="nsDate" class="w-full text-xs border rounded-xl p-2 mt-1 font-bold"></div>
+      <div><label class="text-xs font-bold text-slate-700">Route</label><select id="nsRoute" class="w-full text-xs border rounded-xl p-2 mt-1 font-bold"></select></div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-xs font-bold text-slate-700">Driver</label><select id="nsDriver" class="w-full text-xs border rounded-xl p-2 mt-1 font-bold"></select></div>
+        <div><label class="text-xs font-bold text-slate-700">Vehicle</label><select id="nsVehicle" class="w-full text-xs border rounded-xl p-2 mt-1 font-bold"></select></div>
+      </div>
+      <div><label class="text-xs font-bold text-slate-700">Trip</label>
+        <select id="nsTrip" class="w-full text-xs border rounded-xl p-2 mt-1 font-bold">
+          <option value="trip1">Trip 1</option>
+          <option value="trip2">Trip 2</option>
+          <option value="trip3">Trip 3</option>
+        </select>
+      </div>
+      <div class="flex space-x-2 pt-2">
+        <button onclick="closeNewSheetModal()" class="flex-1 bg-slate-100 py-2.5 rounded-xl text-xs font-bold">Cancel</button>
+        <button onclick="confirmCreateNewSheet()" class="flex-1 bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs shadow">Create Sheet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADVANCED HISTORY FILTER MODAL WITH DIRECT PDF EXPORT -->
+  <div id="modalHistory" class="fixed inset-0 bg-black/80 z-50 backdrop-blur-md hidden flex items-center justify-center p-3 no-print">
+    <div class="bg-white w-full max-w-4xl rounded-3xl p-5 shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-2">
+        <div>
+          <h3 class="font-black text-slate-900 text-base flex items-center space-x-2">
+            <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i>
+            <span>Archived Day Sheets & Search</span>
+          </h3>
+          <p class="text-xs text-slate-500">Filter by Month, Date Range, Route, or Driver to export PDF</p>
+        </div>
+        <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <!-- FILTER CONTROLS -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs">
+        <div>
+          <label class="text-[10px] font-bold text-slate-500 block">From Date</label>
+          <input type="date" id="histFilterFrom" onchange="applyHistoryFilters()" class="w-full border rounded-xl p-1.5 font-bold bg-white outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-slate-500 block">To Date</label>
+          <input type="date" id="histFilterTo" onchange="applyHistoryFilters()" class="w-full border rounded-xl p-1.5 font-bold bg-white outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-slate-500 block">Choose Route</label>
+          <select id="histFilterRoute" onchange="applyHistoryFilters()" class="w-full border rounded-xl p-1.5 font-bold bg-white outline-none">
+            <option value="">All Routes</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-slate-500 block">Choose Driver</label>
+          <select id="histFilterDriver" onchange="applyHistoryFilters()" class="w-full border rounded-xl p-1.5 font-bold bg-white outline-none">
+            <option value="">All Drivers</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- FILTER RESULTS LIST -->
+      <div id="historyListContainer" class="space-y-2 pt-1 max-h-[55vh] overflow-y-auto"></div>
+    </div>
+  </div>
+
+  <!-- ======================== FIREBASE LIVE ENGINE ======================== -->
+  <script>
+    const initialConfig = {
+      company: { name: "M.M.K TRADING LLC", zip: "〒289-1204", address: "313-1 Toda, Sammu, Chiba.", phone: "TEL: 080 4862 3344", logo: "" },
+      pinDrivers: { 
+        "1111": { name: "ROOFY" }, 
+        "2222": { name: "RIYAS" }, 
+        "3333": { name: "FARHAN" }, 
+        "4444": { name: "SHAFRAN" }, 
+        "5555": { name: "KAMAL" } 
+      },
+      fleetDrivers: ["ROOFY", "RIYAS", "FARHAN", "SHAFRAN", "KAMAL"],
+      fleetVehicles: ["CARAVAN", "ISUZU NEW", "HIACE 8821", "HIACE 7711", "TRUCK 400", "COMMUTER 5520"],
+      routes: { 
+        chiba_tokyo: { id: "chiba_tokyo", name: "CHIBA / TOKYO" },
+        tokyo_central: { id: "tokyo_central", name: "TOKYO CENTRAL" },
+        nagoya_fuji: { id: "nagoya_fuji", name: "NAGOYA - FUJI" },
+        saitama: { id: "saitama", name: "SAITAMA" }, 
+        kanagawa: { id: "kanagawa", name: "KANAGAWA" } 
+      },
+      masterShops: [
+        { id: 401, name: "AICHI HALAL BAZAR", address: "Aichi", defaultInvoice: 2500052, routeKey: "chiba_tokyo", invoiceDoc: null }
+      ],
+      sheets: {
+        chiba_tokyo_trip1: {
+          meta: { routeKey: "chiba_tokyo", routeName: "CHIBA / TOKYO", date: "October 15, 2026", time: "10.23 AM", returnDate: "", returnTime: "", driver: "ROOFY", assistant: "FAHIM", vehicle: "CARAVAN" },
+          expenses: { diesel: 0, food: 0, highway: 0, stamp: 0, other: 0, ot: 0 },
+          stops: [
+            { id: 1, name: "AICHI HALAL BAZAR", address: "Aichi", inTime: "10.23", outTime: "10.23", invoice: 2500052, discount: 0, collected: 2500000, remarks: "", invoiceDoc: null, completed: false }
+          ]
+        }
+      },
+      lastActiveSheetKey: "chiba_tokyo_trip1",
+      history: []
+    };
+
+    let appData = JSON.parse(localStorage.getItem('mmk_fleet_v28')) || initialConfig;
+    let activeRouteKey = 'chiba_tokyo';
+    let activeTripKey = 'trip1';
+    let currentRole = 'driver'; 
+    let currentLoggedDriver = "ROOFY";
+    let enteredPin = "";
+    let activeInvoiceStopId = null;
+    let isAdminViewingTable = false;
+    let isCompletedSectionOpen = false;
+    let isTypingNow = false;
+    let typingTimer = null;
+
+    // DIRECT WEBSOCKET FIREBASE
+    let dbRef = null;
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          databaseURL: "https://mmk-delivery-default-rtdb.firebaseio.com"
+        });
+      }
+      dbRef = firebase.database().ref('mmk_live_fleet');
+      
+      dbRef.on('value', (snapshot) => {
+        const cloudData = snapshot.val();
+        if (cloudData && typeof cloudData === 'object') {
+          if (!isTypingNow) {
+            appData = cloudData;
+            if (!appData.sheets) appData.sheets = {};
+            if (!appData.routes) appData.routes = initialConfig.routes;
+            if (!appData.masterShops) appData.masterShops = initialConfig.masterShops;
+            if (!appData.history) appData.history = [];
+            localStorage.setItem('mmk_fleet_v28', JSON.stringify(appData));
+            
+            if (currentRole === 'driver') {
+              findAndAssignDriverRoute(currentLoggedDriver);
+            }
+            renderCurrentSheet();
+          }
+        } else {
+          dbRef.set(JSON.parse(JSON.stringify(appData)));
+        }
+      });
+    } catch(e) {
+      console.warn("Firebase Init fallback:", e);
+    }
+
+    // CHECK ACTIVE SESSION ON LOAD (REFRESH PANNA KOODA LOGOUT AAGAADHU)
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedAuth = JSON.parse(localStorage.getItem('mmk_user_session_auth'));
+      if (savedAuth && savedAuth.role) {
+        currentRole = savedAuth.role;
+        currentLoggedDriver = savedAuth.driver || "ROOFY";
+        isAdminViewingTable = (currentRole === 'admin');
+        if (currentRole === 'driver') {
+          findAndAssignDriverRoute(currentLoggedDriver);
+        }
+        launchWorkspace();
+      }
+    });
+
+    // CLOUD SAVE FUNCTION
+    function saveAppData() {
+      if (!appData.sheets) appData.sheets = {};
+      appData.lastActiveSheetKey = getSheetKey();
+      const cleanData = JSON.parse(JSON.stringify(appData));
+      localStorage.setItem('mmk_fleet_v28', JSON.stringify(cleanData));
+      if (dbRef) {
+        dbRef.set(cleanData).catch(e => console.warn("Save err:", e));
+      }
+    }
+
+    // DYNAMIC MATCHING
+    function findAndAssignDriverRoute(driverName) {
+      if (!appData.sheets) return;
+      const targetDriver = driverName.toUpperCase();
+      let matchedKey = null;
+
+      if (appData.lastActiveSheetKey && appData.sheets[appData.lastActiveSheetKey]) {
+        const activeSheet = appData.sheets[appData.lastActiveSheetKey];
+        if (activeSheet.meta && activeSheet.meta.driver && activeSheet.meta.driver.toUpperCase() === targetDriver) {
+          matchedKey = appData.lastActiveSheetKey;
+        }
+      }
+
+      if (!matchedKey) {
+        for (const [key, sheet] of Object.entries(appData.sheets)) {
+          if (sheet.meta && sheet.meta.driver && sheet.meta.driver.toUpperCase() === targetDriver) {
+            matchedKey = key;
+            break;
+          }
+        }
+      }
+
+      if (matchedKey) {
+        const parts = matchedKey.split('_');
+        const trip = parts.pop();
+        const route = parts.join('_');
+        activeRouteKey = route;
+        activeTripKey = trip;
+      }
+    }
+
+    // PIN NUMPAD
+    function updatePinDots() {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`dot${i}`).className = (i <= enteredPin.length) ? "w-3.5 h-3.5 rounded-full bg-slate-900 scale-110" : "w-3.5 h-3.5 rounded-full bg-slate-300";
+      }
+    }
+    function pressPinKey(digit) {
+      if (enteredPin.length < 4) {
+        enteredPin += digit;
+        updatePinDots();
+        if (enteredPin.length === 4) {
+          setTimeout(submitPinKey, 50);
+        }
+      }
+    }
+    function clearPinKey() { enteredPin = ""; updatePinDots(); }
+    
+    function submitPinKey() {
+      if (enteredPin === "7777") {
+        currentRole = 'boss';
+        localStorage.setItem('mmk_user_session_auth', JSON.stringify({ role: 'boss' }));
+        launchWorkspace();
+        openBossSummaryModal();
+        clearPinKey();
+        return;
+      }
+      if (enteredPin === "9999" || enteredPin === "1234") {
+        currentRole = 'admin';
+        isAdminViewingTable = true;
+        localStorage.setItem('mmk_user_session_auth', JSON.stringify({ role: 'admin' }));
+        launchWorkspace();
+        clearPinKey();
+        return;
+      }
+      const driverInfo = appData.pinDrivers[enteredPin];
+      if (driverInfo) {
+        currentRole = 'driver';
+        currentLoggedDriver = driverInfo.name;
+        isAdminViewingTable = false;
+        localStorage.setItem('mmk_user_session_auth', JSON.stringify({ role: 'driver', driver: driverInfo.name }));
+        findAndAssignDriverRoute(currentLoggedDriver);
+        launchWorkspace();
+        clearPinKey();
+        return;
+      }
+      alert("Thavarana PIN En!");
+      clearPinKey();
+    }
+
+    function logoutSession() {
+      localStorage.removeItem('mmk_user_session_auth');
+      document.getElementById('mainWorkspace').classList.add('hidden');
+      document.getElementById('pinLoginScreen').classList.remove('hidden');
+      clearPinKey();
+    }
+
+    function launchWorkspace() {
+      document.getElementById('pinLoginScreen').classList.add('hidden');
+      document.getElementById('mainWorkspace').classList.remove('hidden');
+
+      const btnBoss = document.getElementById('btnBossSummaryTrigger');
+      const btnSwitch = document.getElementById('btnSwitchView');
+      const adminToolbar = document.getElementById('adminToolbar');
+
+      if (currentRole === 'admin') {
+        btnBoss.classList.remove('hidden');
+        btnSwitch.classList.remove('hidden');
+        adminToolbar.classList.remove('hidden');
+        document.getElementById('headerSubUser').textContent = "Admin Control";
+      } else if (currentRole === 'boss') {
+        btnBoss.classList.remove('hidden');
+        btnSwitch.classList.remove('hidden');
+        adminToolbar.classList.add('hidden');
+        document.getElementById('headerSubUser').textContent = "Boss Executive";
+      } else {
+        btnBoss.classList.add('hidden');
+        btnSwitch.classList.add('hidden');
+        adminToolbar.classList.add('hidden');
+        document.getElementById('headerSubUser').textContent = `Driver: ${currentLoggedDriver}`;
+      }
+
+      renderRouteDropdowns();
+      renderFleetDropdowns();
+      renderCompanyHeader();
+      renderCurrentSheet();
+    }
+
+    function toggleAdminViewMode() {
+      isAdminViewingTable = !isAdminViewingTable;
+      document.getElementById('viewModeLabel').textContent = isAdminViewingTable ? "Mobile" : "Table";
+      renderCurrentSheet();
+    }
+
+    function getSheetKey() { return `${activeRouteKey}_${activeTripKey}`; }
+
+    function renderCompanyHeader() {
+      const c = appData.company || initialConfig.company;
+      document.getElementById('topCompanyTitle').textContent = c.name;
+      document.getElementById('sheetCompanyName').textContent = c.name;
+      document.getElementById('sheetCompanyZip').textContent = c.zip;
+      document.getElementById('sheetCompanyAddress').textContent = c.address;
+      document.getElementById('sheetCompanyPhone').innerHTML = `<i class="fa-solid fa-phone mr-1"></i>${c.phone}`;
+      const logoBox = document.getElementById('sheetLogoBox');
+      if (c.logo) logoBox.innerHTML = `<img src="${c.logo}" class="max-h-full max-w-full object-contain">`;
+      else logoBox.innerHTML = `<span class="text-3xl font-black text-emerald-700 tracking-tighter">MMK</span>`;
+    }
+
+    function renderRouteDropdowns() {
+      const rSelect = document.getElementById('routeDropdown');
+      const nsRoute = document.getElementById('nsRoute');
+      const mShopRoute = document.getElementById('mShopRouteKey');
+      if (rSelect) rSelect.innerHTML = '';
+      if (nsRoute) nsRoute.innerHTML = '';
+      if (mShopRoute) mShopRoute.innerHTML = '';
+      
+      const routes = appData.routes || initialConfig.routes;
+      Object.values(routes).forEach(route => {
+        const opt = document.createElement('option');
+        opt.value = route.id; opt.textContent = route.name;
+        if (rSelect) rSelect.appendChild(opt);
+        if (nsRoute) nsRoute.appendChild(opt.cloneNode(true));
+        if (mShopRoute) mShopRoute.appendChild(opt.cloneNode(true));
+      });
+      if (rSelect) rSelect.value = activeRouteKey;
+    }
+
+    function renderFleetDropdowns() {
+      const metaDriverSelect = document.getElementById('metaDriverSelect');
+      const nsDriver = document.getElementById('nsDriver');
+      if (metaDriverSelect) metaDriverSelect.innerHTML = '';
+      if (nsDriver) nsDriver.innerHTML = '';
+      const drivers = appData.fleetDrivers || initialConfig.fleetDrivers;
+      drivers.forEach(d => {
+        const opt = document.createElement('option'); opt.value = d; opt.textContent = d;
+        if (metaDriverSelect) metaDriverSelect.appendChild(opt);
+        if (nsDriver) nsDriver.appendChild(opt.cloneNode(true));
+      });
+
+      const metaVehicleSelect = document.getElementById('metaVehicleSelect');
+      const nsVehicle = document.getElementById('nsVehicle');
+      if (metaVehicleSelect) metaVehicleSelect.innerHTML = '';
+      if (nsVehicle) nsVehicle.innerHTML = '';
+      const vehicles = appData.fleetVehicles || initialConfig.fleetVehicles;
+      vehicles.forEach(v => {
+        const opt = document.createElement('option'); opt.value = v; opt.textContent = v;
+        if (metaVehicleSelect) metaVehicleSelect.appendChild(opt);
+        if (nsVehicle) nsVehicle.appendChild(opt.cloneNode(true));
+      });
+    }
+
+    function switchCurrentRoute(rk) { 
+      activeRouteKey = rk; 
+      saveAppData();
+      renderCurrentSheet(); 
+    }
+    function switchCurrentTrip(tk) { 
+      activeTripKey = tk; 
+      saveAppData();
+      renderCurrentSheet(); 
+    }
+
+    function toggleCompletedSection() {
+      isCompletedSectionOpen = !isCompletedSectionOpen;
+      const feed = document.getElementById('completedStopsFeed');
+      const chevron = document.getElementById('completedChevron');
+      if (isCompletedSectionOpen) {
+        feed.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        feed.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // =========================================================================
+    // TRIP TOGGLE: LAST SHOP MUDINJA PIRAGU THAAN END TRIP VARANUM
+    // =========================================================================
+    function handleTripToggle() {
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet) return;
+      if (!currentSheet.meta) currentSheet.meta = {};
+
+      const d = new Date();
+      let hours = d.getHours() % 12 || 12;
+      let mins = String(d.getMinutes()).padStart(2, '0');
+      let ampm = d.getHours() >= 12 ? 'PM' : 'AM';
+      const currentTimeString = `${hours}.${mins} ${ampm}`;
+
+      if (!currentSheet.meta.time) {
+        // 1. START TRIP
+        currentSheet.meta.time = currentTimeString;
+        alert(`Trip Started at: ${currentTimeString}`);
+      } else if (!currentSheet.meta.returnTime) {
+        // 2. END TRIP (Only if all shops completed)
+        currentSheet.meta.returnTime = currentTimeString;
+        currentSheet.meta.returnDate = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+        alert(`Trip Ended at: ${currentTimeString}! All shops completed.`);
+      }
+
+      saveAppData();
+      renderCurrentSheet();
+    }
+
+    // MAIN RENDER ENGINE
+    function renderCurrentSheet() {
+      if (!appData.sheets) appData.sheets = {};
+      let currentSheet = appData.sheets[getSheetKey()];
+      
+      if (!currentSheet) {
+        const rName = (appData.routes && appData.routes[activeRouteKey]) ? appData.routes[activeRouteKey].name : activeRouteKey.toUpperCase();
+        currentSheet = {
+          meta: { routeKey: activeRouteKey, routeName: rName, date: "October 15, 2026", time: "", returnDate: "", returnTime: "", driver: currentLoggedDriver, assistant: "FAHIM", vehicle: "CARAVAN" },
+          expenses: { diesel: 0, food: 0, highway: 0, stamp: 0, other: 0, ot: 0 },
+          stops: []
+        };
+        appData.sheets[getSheetKey()] = currentSheet;
+      }
+
+      const meta = currentSheet.meta || {};
+      const stops = currentSheet.stops || [];
+      const exp = currentSheet.expenses || {};
+
+      document.getElementById('mRouteDisplay').textContent = meta.routeName || activeRouteKey.toUpperCase();
+      document.getElementById('mDateDisplay').textContent = meta.date || "";
+      document.getElementById('mDriverDisplay').textContent = meta.driver || "";
+      document.getElementById('mVehicleDisplay').textContent = meta.vehicle || "";
+      document.getElementById('mTimeDeparture').textContent = meta.time || '--:--';
+      document.getElementById('mTimeReturn').textContent = meta.returnTime || '--:--';
+
+      // =========================================================================
+      // DYNAMIC BUTTON: LAST SHOP MUDINJA PIRAGU THAAN END TRIP VARANUM
+      // =========================================================================
+      const btnToggle = document.getElementById('btnTripToggle');
+      const allShopsCompleted = stops.length > 0 && stops.every(s => !!s.completed);
+
+      if (btnToggle) {
+        if (!meta.time) {
+          // Trip not started yet -> Show START TRIP
+          btnToggle.className = "bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow flex items-center space-x-1.5 transition-all";
+          btnToggle.innerHTML = '<i class="fa-solid fa-play text-xs"></i><span>START TRIP</span>';
+          btnToggle.disabled = false;
+        } else if (!meta.returnTime) {
+          if (allShopsCompleted) {
+            // ALL SHOPS FINISHED -> SHOW END TRIP BUTTON
+            btnToggle.className = "bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-black text-xs px-4 py-2.5 rounded-xl shadow flex items-center space-x-1.5 transition-all animate-pulse";
+            btnToggle.innerHTML = '<i class="fa-solid fa-stop text-xs"></i><span>END TRIP</span>';
+            btnToggle.disabled = false;
+          } else {
+            // SHOPS STILL PENDING -> HIDE END TRIP & SHOW PENDING STATUS
+            const pendingCount = stops.filter(s => !s.completed).length;
+            btnToggle.className = "bg-amber-100 text-amber-900 border border-amber-300 font-bold text-[10px] px-3 py-2 rounded-xl shadow-sm flex items-center space-x-1 cursor-not-allowed";
+            btnToggle.innerHTML = `<i class="fa-solid fa-truck-fast text-xs text-amber-600"></i><span>${pendingCount} Stops Left</span>`;
+            btnToggle.disabled = true;
+          }
+        } else {
+          // Both times stamped -> COMPLETED
+          btnToggle.className = "bg-emerald-600 text-white font-black text-xs px-3.5 py-2.5 rounded-xl shadow flex items-center space-x-1.5 opacity-90 cursor-default";
+          btnToggle.innerHTML = '<i class="fa-solid fa-circle-check text-xs"></i><span>COMPLETED</span>';
+          btnToggle.disabled = true;
+        }
+      }
+
+      document.getElementById('metaRouteName').value = meta.routeName || "";
+      document.getElementById('metaDate').value = meta.date || "";
+      document.getElementById('metaTime').value = meta.time || "";
+      document.getElementById('metaReturnDate').value = meta.returnDate || "";
+      document.getElementById('metaReturnTime').value = meta.returnTime || "";
+      document.getElementById('metaDriverSelect').value = meta.driver || "";
+      document.getElementById('metaAssistant').value = meta.assistant || "";
+      document.getElementById('metaVehicleSelect').value = meta.vehicle || "";
+
+      // Expenses fields
+      document.getElementById('mExpDiesel').value = exp.diesel || "";
+      document.getElementById('mExpFood').value = exp.food || "";
+      document.getElementById('mExpHighway').value = exp.highway || "";
+      document.getElementById('mExpStamp').value = exp.stamp || "";
+      document.getElementById('mExpOther').value = exp.other || "";
+      document.getElementById('mExpOT').value = exp.ot || "";
+
+      document.getElementById('expD_val').textContent = `¥${Number(exp.diesel || 0).toLocaleString()}`;
+      document.getElementById('expF_val').textContent = `¥${Number(exp.food || 0).toLocaleString()}`;
+      document.getElementById('expH_val').textContent = `¥${Number(exp.highway || 0).toLocaleString()}`;
+      document.getElementById('expS_val').textContent = `¥${Number(exp.stamp || 0).toLocaleString()}`;
+      document.getElementById('expO_val').textContent = `¥${Number(exp.other || 0).toLocaleString()}`;
+      document.getElementById('expOT_val').textContent = `¥${Number(exp.ot || 0).toLocaleString()}`;
+
+      if (currentRole === 'driver' || !isAdminViewingTable) {
+        document.getElementById('driverMobileLayout').classList.remove('hidden');
+        document.getElementById('adminTableLayout').classList.add('hidden');
+        document.getElementById('driverBottomBar').classList.remove('hidden');
+      } else {
+        document.getElementById('driverMobileLayout').classList.add('hidden');
+        document.getElementById('adminTableLayout').classList.remove('hidden');
+        document.getElementById('driverBottomBar').classList.add('hidden');
+      }
+
+      // 1. MOBILE CARDS
+      const mActiveContainer = document.getElementById('mobileStopsList');
+      const mCompletedContainer = document.getElementById('completedStopsFeed');
+      mActiveContainer.innerHTML = '';
+      mCompletedContainer.innerHTML = '';
+
+      let completedCount = 0;
+
+      stops.forEach((stop, index) => {
+        const inv = Number(stop.invoice) || 0;
+        const disc = Number(stop.discount) || 0;
+        const col = Number(stop.collected) || 0;
+        const bal = Math.max(0, (inv - disc) - col);
+        const hasDoc = !!stop.invoiceDoc;
+        const isDone = !!stop.completed;
+
+        if (isDone) {
+          completedCount++;
+          const cCard = document.createElement('div');
+          cCard.className = "bg-slate-50 border border-slate-200 rounded-2xl p-3 flex items-center justify-between text-xs";
+          cCard.innerHTML = `
+            <div>
+              <span class="font-black text-slate-800 line-through">${stop.name}</span>
+              ${stop.remarks ? `<p class="text-[10px] text-indigo-700 font-bold italic">Note: ${stop.remarks}</p>` : ''}
+              <p class="text-[10px] text-slate-500 font-mono mt-0.5">In: ${stop.inTime || '--:--'} | Out: ${stop.outTime || '--:--'} | Cash: ¥${col.toLocaleString()} | B/L: ¥${bal.toLocaleString()}</p>
+            </div>
+            <button onclick="markStopStatus(${stop.id}, false)" class="text-[10px] bg-slate-200 hover:bg-slate-300 font-bold px-2 py-1 rounded-lg text-slate-700">
+              <i class="fa-solid fa-rotate-left mr-1"></i>Undo
+            </button>
+          `;
+          mCompletedContainer.appendChild(cCard);
+        } else {
+          const card = document.createElement('div');
+          card.className = "bg-white rounded-3xl p-4 shadow-sm border border-slate-200 space-y-3";
+          card.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-7 h-7 rounded-full bg-slate-900 text-emerald-300 flex items-center justify-center font-black text-xs">${index + 1}</span>
+                <div>
+                  <h4 class="font-black text-sm text-slate-900 leading-snug">${stop.name}</h4>
+                  <p class="text-[10px] text-slate-500 truncate max-w-[200px]">${stop.address || 'Japan'}</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1">
+                ${stop.address ? `
+                  <a href="https://maps.google.com/?q=${encodeURIComponent(stop.address)}" target="_blank" class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-xl text-[11px] font-black flex items-center space-x-1 active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-location-dot"></i><span>MAP</span>
+                  </a>
+                ` : ''}
+                <button onclick="openInvoiceViewerModal(${stop.id})" class="px-2.5 py-1 rounded-xl text-[11px] font-black flex items-center space-x-1 active:scale-95 shadow-sm ${hasDoc ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'}">
+                  <i class="fa-solid fa-file-invoice"></i><span>BILL</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-100">
+              <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-slate-200">
+                <div>
+                  <span class="text-[9px] text-slate-400 font-bold block">IN TIME</span>
+                  <span class="font-mono font-bold text-xs text-slate-800">${stop.inTime || '--:--'}</span>
+                </div>
+                <button onclick="stampStopTime(${stop.id}, 'inTime')" class="bg-emerald-600 active:scale-90 text-white text-[10px] font-black px-2.5 py-1 rounded-lg shadow">IN</button>
+              </div>
+              <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-slate-200">
+                <div>
+                  <span class="text-[9px] text-slate-400 font-bold block">OUT TIME</span>
+                  <span class="font-mono font-bold text-xs text-slate-800">${stop.outTime || '--:--'}</span>
+                </div>
+                <button onclick="stampStopTime(${stop.id}, 'outTime')" class="bg-purple-600 active:scale-90 text-white text-[10px] font-black px-2.5 py-1 rounded-lg shadow">OUT</button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center pt-1">
+              <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                <span class="text-[9px] text-slate-400 font-bold block uppercase">INVOICE</span>
+                <span class="font-mono font-black text-xs text-slate-900">¥${inv.toLocaleString()}</span>
+              </div>
+              <div class="bg-emerald-50/70 p-2 rounded-xl border border-emerald-200">
+                <span class="text-[9px] text-emerald-800 font-bold block uppercase">COLLECTED</span>
+                <input type="number" value="${col || ''}" placeholder="¥0" oninput="updateStopFieldLive(${stop.id}, 'collected', this.value)" class="w-full text-center font-mono font-black text-xs text-emerald-950 bg-transparent outline-none">
+              </div>
+              <div class="bg-rose-50/70 p-2 rounded-xl border border-rose-200">
+                <span class="text-[9px] text-rose-800 font-bold block uppercase">B/L (BALANCE)</span>
+                <span id="bal_m_${stop.id}" class="font-mono font-black text-xs ${bal > 0 ? 'text-rose-600' : 'text-slate-400'}">¥${bal.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wide block mb-0.5">Remarks (A/C Bank / Note)</label>
+              <input type="text" value="${stop.remarks || ''}" placeholder="Remarks / Kurippu thevaiyenral type seiyyavum..." oninput="updateStopFieldLive(${stop.id}, 'remarks', this.value)" class="w-full text-[11px] bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-800 outline-none">
+            </div>
+
+            <button onclick="markStopStatus(${stop.id}, true)" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-98 text-white font-black py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 shadow">
+              <i class="fa-solid fa-check text-emerald-400"></i>
+              <span>FINISH SHOP & HIDE (Mudinjudhu)</span>
+            </button>
+          `;
+          mActiveContainer.appendChild(card);
+        }
+      });
+
+      document.getElementById('completedBadgeCount').textContent = completedCount;
+
+      // 2. ADMIN TABLE RENDER
+      const admBody = document.getElementById('adminShopsTableBody');
+      admBody.innerHTML = '';
+      stops.forEach((stop, index) => {
+        const inv = Number(stop.invoice) || 0;
+        const disc = Number(stop.discount) || 0;
+        const col = Number(stop.collected) || 0;
+        const bal = Math.max(0, (inv - disc) - col);
+        const hasDoc = !!stop.invoiceDoc;
+
+        const tr = document.createElement('tr');
+        tr.className = index % 2 === 0 ? "bg-[#d9e1f2]/40" : "bg-white";
+        tr.innerHTML = `
+          <td class="p-1.5 border border-slate-300 text-center font-bold text-slate-600 align-top">${index + 1}</td>
+          <td class="p-1.5 border border-slate-300 font-bold align-top">
+            <div class="flex items-center justify-between w-full">
+              <span class="font-black text-indigo-950 uppercase tracking-wide text-xs whitespace-normal break-words leading-tight">${stop.name}</span>
+              <button onclick="openInvoiceViewerModal(${stop.id})" class="no-print pdf-hide text-[9px] font-black px-1.5 py-0.5 rounded ml-1 shrink-0 ${hasDoc ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'}">
+                ${hasDoc ? 'DOC' : '+DOC'}
+              </button>
+            </div>
+            ${stop.remarks ? `<div class="text-[10px] text-rose-800 font-semibold italic bg-amber-50/70 border border-amber-200 rounded px-1 mt-0.5 max-w-fit">Note: ${stop.remarks}</div>` : ''}
+          </td>
+          <td class="p-1.5 border border-slate-300 text-center font-mono align-top text-xs">${stop.inTime || ''}</td>
+          <td class="p-1.5 border border-slate-300 text-center font-mono align-top text-xs">${stop.outTime || ''}</td>
+          <td class="p-1.5 border border-slate-300 text-right font-mono font-bold align-top text-xs">¥${inv.toLocaleString()}</td>
+          <td class="p-1.5 border border-slate-300 text-right font-mono align-top text-xs">¥${disc.toLocaleString()}</td>
+          <td class="p-1.5 border border-slate-300 text-right font-mono font-black text-emerald-700 align-top text-xs">¥${col.toLocaleString()}</td>
+          <td id="bal_adm_${stop.id}" class="p-1.5 border border-slate-300 text-right font-mono font-black text-rose-700 bg-rose-50/50 align-top text-xs">
+            ¥${bal.toLocaleString()}
+          </td>
+          <td class="p-1.5 border border-slate-300 text-center no-print pdf-hide align-top">
+            <button onclick="deleteStopFromSheet(${stop.id})" class="text-rose-600 hover:text-rose-800 text-xs font-bold">✕</button>
+          </td>
+        `;
+        admBody.appendChild(tr);
+      });
+
+      calculateTotals();
+    }
+
+    // REALTIME LIVE INPUT
+    function updateStopFieldLive(stopId, field, val) {
+      isTypingNow = true;
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(() => { isTypingNow = false; }, 2000);
+
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet || !currentSheet.stops) return;
+      const stop = currentSheet.stops.find(s => s.id === stopId);
+      if (stop) {
+        if (field === 'collected' || field === 'invoice' || field === 'discount') {
+          stop[field] = Number(val) || 0;
+        } else {
+          stop[field] = val;
+        }
+
+        const inv = Number(stop.invoice) || 0;
+        const disc = Number(stop.discount) || 0;
+        const col = Number(stop.collected) || 0;
+        const bal = Math.max(0, (inv - disc) - col);
+
+        const balMobile = document.getElementById(`bal_m_${stopId}`);
+        if (balMobile) {
+          balMobile.textContent = `¥${bal.toLocaleString()}`;
+          balMobile.className = `font-mono font-black text-xs ${bal > 0 ? 'text-rose-600' : 'text-slate-400'}`;
+        }
+
+        const balAdm = document.getElementById(`bal_adm_${stopId}`);
+        if (balAdm) {
+          balAdm.textContent = `¥${bal.toLocaleString()}`;
+        }
+
+        calculateTotals();
+        saveAppData();
+
+        if (field === 'remarks' && isAdminViewingTable) {
+          renderCurrentSheet();
+        }
+      }
+    }
+
+    function markStopStatus(stopId, isComplete) {
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet || !currentSheet.stops) return;
+      const stop = currentSheet.stops.find(s => s.id === stopId);
+      if (stop) {
+        stop.completed = isComplete;
+        saveAppData();
+        renderCurrentSheet();
+      }
+    }
+
+    function stampStopTime(stopId, field) {
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet || !currentSheet.stops) return;
+      const stop = currentSheet.stops.find(s => s.id === stopId);
+      if (stop) {
+        const d = new Date();
+        let hours = d.getHours() % 12 || 12;
+        let mins = String(d.getMinutes()).padStart(2, '0');
+        stop[field] = `${hours}.${mins}`;
+        saveAppData();
+        renderCurrentSheet();
+      }
+    }
+
+    function updateMeta(field, val) {
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (currentSheet) {
+        if (!currentSheet.meta) currentSheet.meta = {};
+        currentSheet.meta[field] = val;
+        saveAppData();
+      }
+    }
+
+    function deleteStopFromSheet(stopId) {
+      if (confirm("Delete this shop?")) {
+        const currentSheet = appData.sheets[getSheetKey()];
+        if (currentSheet && currentSheet.stops) {
+          currentSheet.stops = currentSheet.stops.filter(s => s.id !== stopId);
+          saveAppData();
+          renderCurrentSheet();
+        }
+      }
+    }
+
+    function syncMobileFinancials() {
+      isTypingNow = true;
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(() => { isTypingNow = false; }, 2000);
+
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (currentSheet) {
+        if (!currentSheet.expenses) currentSheet.expenses = {};
+        currentSheet.expenses.diesel = Number(document.getElementById('mExpDiesel').value) || 0;
+        currentSheet.expenses.food = Number(document.getElementById('mExpFood').value) || 0;
+        currentSheet.expenses.highway = Number(document.getElementById('mExpHighway').value) || 0;
+        currentSheet.expenses.stamp = Number(document.getElementById('mExpStamp').value) || 0;
+        currentSheet.expenses.other = Number(document.getElementById('mExpOther').value) || 0;
+        currentSheet.expenses.ot = Number(document.getElementById('mExpOT').value) || 0;
+        
+        calculateTotals();
+        saveAppData();
+      }
+    }
+
+    function calculateTotals() {
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet) return;
+      let totInv = 0, totCol = 0, totDisc = 0, totBal = 0;
+
+      const stops = currentSheet.stops || [];
+      stops.forEach(s => {
+        const inv = Number(s.invoice) || 0;
+        const disc = Number(s.discount) || 0;
+        const col = Number(s.collected) || 0;
+        totInv += inv;
+        totCol += col;
+        totDisc += disc;
+        totBal += Math.max(0, (inv - disc) - col);
+      });
+
+      const exp = currentSheet.expenses || {};
+      const totExp = (exp.diesel || 0) + (exp.food || 0) + (exp.highway || 0) + (exp.stamp || 0) + (exp.other || 0) + (exp.ot || 0);
+      const netHandover = totCol - totExp;
+
+      // Mobile UI
+      const expLabel = document.getElementById('mTotalExpensesLabel');
+      if (expLabel) expLabel.textContent = `¥${totExp.toLocaleString()}`;
+      const netHand = document.getElementById('mNetHandoverBottom');
+      if (netHand) netHand.textContent = `¥${netHandover.toLocaleString()}`;
+      const totCash = document.getElementById('mTotalCashBottom');
+      if (totCash) totCash.textContent = `¥${totCol.toLocaleString()}`;
+      const totExpB = document.getElementById('mTotalExpBottom');
+      if (totExpB) totExpB.textContent = `¥${totExp.toLocaleString()}`;
+
+      // Admin Table UI
+      const aInv = document.getElementById('admTotalInvoice');
+      if (aInv) aInv.textContent = `¥${totInv.toLocaleString()}`;
+      const aDisc = document.getElementById('admTotalDiscount');
+      if (aDisc) aDisc.textContent = `¥${totDisc.toLocaleString()}`;
+      const aCol = document.getElementById('admTotalCollected');
+      if (aCol) aCol.textContent = `¥${totCol.toLocaleString()}`;
+      const aBal = document.getElementById('admTotalBalance');
+      if (aBal) aBal.textContent = `¥${totBal.toLocaleString()}`;
+      const aExp = document.getElementById('admTotalExpDisplay');
+      if (aExp) aExp.textContent = `¥${totExp.toLocaleString()}`;
+      const aSCash = document.getElementById('admSettleCash');
+      if (aSCash) aSCash.textContent = `¥${totCol.toLocaleString()}`;
+      const aSExp = document.getElementById('admSettleExp');
+      if (aSExp) aSExp.textContent = `¥${totExp.toLocaleString()}`;
+      const aSNet = document.getElementById('admSettleNet');
+      if (aSNet) aSNet.textContent = `¥${netHandover.toLocaleString()}`;
+      const aSNet2 = document.getElementById('admSettleNet2');
+      if (aSNet2) aSNet2.textContent = `¥${netHandover.toLocaleString()}`;
+    }
+
+    // DIRECT INDEPENDENT PDF GENERATOR
+    function getPdfFilename(customSheet = null) {
+      const sheet = customSheet || appData.sheets[getSheetKey()];
+      const meta = sheet ? (sheet.meta || {}) : {};
+      const cleanDate = (meta.date || "2026-10-15").replace(/[^a-zA-Z0-9]/g, '_');
+      const cleanRoute = (meta.routeName || "ROUTE").replace(/[^a-zA-Z0-9]/g, '_');
+      const cleanDriver = (meta.driver || "DRIVER").replace(/[^a-zA-Z0-9]/g, '_');
+      return `${cleanDate}-${cleanRoute}-${cleanDriver}.pdf`;
+    }
+
+    function downloadPdfDirectOnly() {
+      const btnText = document.getElementById('btnPdfText');
+      if (btnText) btnText.textContent = "GENERATING PDF...";
+
+      const printArea = document.getElementById('officialRunSheetPrintArea');
+      const tableWrapper = document.getElementById('adminTableLayout');
+      const wasTableHidden = tableWrapper.classList.contains('hidden');
+      if (wasTableHidden) tableWrapper.classList.remove('hidden');
+
+      const pdfHides = printArea.querySelectorAll('.pdf-hide');
+      pdfHides.forEach(el => el.style.display = 'none');
+
+      const filename = getPdfFilename();
+      const opt = {
+        margin: [4, 4, 4, 4],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(printArea).save().then(() => {
+        pdfHides.forEach(el => el.style.display = '');
+        if (wasTableHidden) tableWrapper.classList.add('hidden');
+        if (btnText) btnText.textContent = "1. DOWNLOAD PDF SLIP";
+        alert(`PDF Downloaded Successfully!\n\nFile Name: ${filename}`);
+      }).catch(err => {
+        pdfHides.forEach(el => el.style.display = '');
+        if (wasTableHidden) tableWrapper.classList.add('hidden');
+        if (btnText) btnText.textContent = "1. DOWNLOAD PDF SLIP";
+        window.print();
+      });
+    }
+
+    function shareWhatsAppDirectOnly() {
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet) return;
+      const meta = currentSheet.meta || {};
+      const filename = getPdfFilename();
+
+      let totInv = 0, totCol = 0, totBal = 0;
+      let stopLines = "";
+      const stops = currentSheet.stops || [];
+
+      stops.forEach((s, idx) => {
+        const inv = Number(s.invoice) || 0;
+        const disc = Number(s.discount) || 0;
+        const col = Number(s.collected) || 0;
+        const bal = Math.max(0, (inv - disc) - col);
+        totInv += inv;
+        totCol += col;
+        totBal += bal;
+        const noteStr = s.remarks ? ` [Note: ${s.remarks}]` : '';
+        stopLines += `${idx + 1}. *${s.name}*: Bill: ¥${inv.toLocaleString()} | Cash: ¥${col.toLocaleString()} | *B/L: ¥${bal.toLocaleString()}*${noteStr}\n`;
+      });
+
+      const exp = currentSheet.expenses || {};
+      const totExp = (exp.diesel || 0) + (exp.food || 0) + (exp.highway || 0) + (exp.stamp || 0) + (exp.other || 0) + (exp.ot || 0);
+      const netHand = totCol - totExp;
+
+      const message = `🚚 *M.M.K TRADING LLC - OFFICIAL DELIVERY REPORT* 🚚\n` +
+        `📄 *PDF File:* ${filename} (Downloaded to Device)\n` +
+        `📅 Date: ${meta.date || ''}\n` +
+        `🛣️ Route: *${meta.routeName || ''}*\n` +
+        `👤 Driver: *${meta.driver || ''}* | Assistant: *${meta.assistant || '-'}*\n` +
+        `🚛 Vehicle: *${meta.vehicle || ''}*\n` +
+        `⏰ Time: ${meta.time || ''} - ${meta.returnTime || 'Now'}\n\n` +
+        `📦 *STOPS SUMMARY (WITH B/L):*\n${stopLines}\n` +
+        `💰 *FINANCIAL SETTLEMENT:*\n` +
+        `• Total Invoice: ¥${totInv.toLocaleString()}\n` +
+        `• Total Collected: ¥${totCol.toLocaleString()}\n` +
+        `• *TOTAL B/L (LOAN): ¥${totBal.toLocaleString()}*\n` +
+        `• Total Expenses: ¥${totExp.toLocaleString()}\n` +
+        `👉 *NET CASH HANDOVER: ¥${netHand.toLocaleString()}*\n\n` +
+        `📎 _Attached Run Sheet PDF automatically generated._`;
+
+      const encoded = encodeURIComponent(message);
+      window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+    }
+
+    // PRINT OFFICIAL RUN SHEET
+    function printOfficialRunSheet() {
+      const mobileView = document.getElementById('driverMobileLayout');
+      const tableView = document.getElementById('adminTableLayout');
+      const wasMobile = !mobileView.classList.contains('hidden');
+
+      if (wasMobile) {
+        mobileView.classList.add('hidden');
+        tableView.classList.remove('hidden');
+      }
+
+      window.print();
+
+      if (wasMobile) {
+        mobileView.classList.remove('hidden');
+        tableView.classList.add('hidden');
+      }
+    }
+
+    // MODAL HANDLERS
+    function openAdminAddShopDirectModal() { document.getElementById('modalAdminAddShopDirect').classList.remove('hidden'); }
+    function closeAdminAddShopDirectModal() { document.getElementById('modalAdminAddShopDirect').classList.add('hidden'); }
+    function saveAdminAddShopDirect() {
+      const name = document.getElementById('admNewShopName').value.trim();
+      const address = document.getElementById('admNewShopAddress').value.trim();
+      const invoice = Number(document.getElementById('admNewShopInvoice').value) || 0;
+      if (!name) return;
+
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet.stops) currentSheet.stops = [];
+      currentSheet.stops.push({
+        id: Date.now(),
+        name,
+        address,
+        inTime: "",
+        outTime: "",
+        invoice,
+        discount: 0,
+        collected: 0,
+        remarks: "",
+        invoiceDoc: null,
+        completed: false
+      });
+
+      saveAppData();
+      renderCurrentSheet();
+      closeAdminAddShopDirectModal();
+      document.getElementById('admNewShopName').value = '';
+      document.getElementById('admNewShopAddress').value = '';
+      document.getElementById('admNewShopInvoice').value = '';
+    }
+
+    function openInvoiceViewerModal(stopId) {
+      activeInvoiceStopId = stopId;
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet || !currentSheet.stops) return;
+      const stop = currentSheet.stops.find(s => s.id === stopId);
+      if (!stop) return;
+      document.getElementById('ivShopTitle').textContent = stop.name;
+      document.getElementById('ivShopSub').textContent = `Invoice: ¥${Number(stop.invoice).toLocaleString()}`;
+      const uploadBox = document.getElementById('ivUploadBox');
+      if (currentRole === 'admin') uploadBox.classList.remove('hidden');
+      else uploadBox.classList.add('hidden');
+      renderInvoicePreview(stop.invoiceDoc);
+      document.getElementById('modalInvoiceViewer').classList.remove('hidden');
+    }
+    function closeInvoiceViewerModal() { document.getElementById('modalInvoiceViewer').classList.add('hidden'); }
+    function renderInvoicePreview(docData) {
+      const container = document.getElementById('ivPreviewContainer');
+      container.innerHTML = '';
+      if (!docData) { container.innerHTML = `<p class="text-xs text-slate-400 font-bold">No Invoice Uploaded Yet</p>`; return; }
+      if (docData.type === 'pdf') container.innerHTML = `<embed src="${docData.data}" type="application/pdf" class="w-full h-full min-h-[350px]">`;
+      else container.innerHTML = `<img src="${docData.data}" class="max-w-full max-h-[50vh] object-contain rounded-lg shadow">`;
+    }
+    function handleInvoiceFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file || !activeInvoiceStopId) return;
+      const isPdf = file.type === 'application/pdf';
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const docObj = { type: isPdf ? 'pdf' : 'image', data: evt.target.result };
+        const currentSheet = appData.sheets[getSheetKey()];
+        if (currentSheet && currentSheet.stops) {
+          const stop = currentSheet.stops.find(s => s.id === activeInvoiceStopId);
+          if (stop) { stop.invoiceDoc = docObj; saveAppData(); renderInvoicePreview(docObj); }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openDriverExtraShopModal() { document.getElementById('modalDriverExtra').classList.remove('hidden'); }
+    function closeDriverExtraShopModal() { document.getElementById('modalDriverExtra').classList.add('hidden'); }
+    function confirmDriverExtraShop() {
+      const name = document.getElementById('driverExtraName').value.trim();
+      const address = document.getElementById('driverExtraAddress').value.trim();
+      const invoice = Number(document.getElementById('driverExtraInvoice').value) || 0;
+      if (!name) return;
+      const currentSheet = appData.sheets[getSheetKey()];
+      if (!currentSheet.stops) currentSheet.stops = [];
+      currentSheet.stops.push({ id: Date.now(), name, address, inTime: "", outTime: "", invoice, discount: 0, collected: 0, remarks: "Extra Stop", invoiceDoc: null, completed: false });
+      saveAppData();
+      renderCurrentSheet();
+      closeDriverExtraShopModal();
+      document.getElementById('driverExtraName').value = '';
+      document.getElementById('driverExtraInvoice').value = '';
+    }
+
+    function openBossSummaryModal() {
+      let sale = 0, col = 0, exp = 0;
+      const currentSheet = appData.sheets[getSheetKey()] || {};
+      const stops = currentSheet.stops || [];
+      stops.forEach(s => { sale += Number(s.invoice || 0); col += Number(s.collected || 0); });
+      const expenses = currentSheet.expenses || {};
+      exp = (expenses.diesel || 0) + (expenses.food || 0) + (expenses.highway || 0) + (expenses.stamp || 0) + (expenses.other || 0) + (expenses.ot || 0);
+      document.getElementById('bossKpiSale').textContent = `¥${sale.toLocaleString()}`;
+      document.getElementById('bossKpiLoan').textContent = `¥${Math.max(0, sale - col).toLocaleString()}`;
+      document.getElementById('bossKpiSelavu').textContent = `¥${exp.toLocaleString()}`;
+      document.getElementById('bossKpiCashHand').textContent = `¥${(col - exp).toLocaleString()}`;
+
+      const meta = currentSheet.meta || {};
+      const tbody = document.getElementById('bossBreakdownTableBody');
+      tbody.innerHTML = `<tr><td class="p-2 font-bold">${meta.routeName || ''}</td><td class="p-2">${meta.driver || ''}</td><td class="p-2 text-right">¥${sale.toLocaleString()}</td><td class="p-2 text-right">¥${exp.toLocaleString()}</td><td class="p-2 text-right font-black text-emerald-700">¥${(col - exp).toLocaleString()}</td></tr>`;
+      document.getElementById('modalBossSummary').classList.remove('hidden');
+    }
+    function closeBossSummaryModal() { document.getElementById('modalBossSummary').classList.add('hidden'); }
+
+    // ======================== NEW SHEET CREATION ENGINE ========================
+    function openNewSheetModal() {
+      document.getElementById('nsDate').value = "October 15, 2026";
+      renderRouteDropdowns();
+      renderFleetDropdowns();
+      document.getElementById('modalNewSheet').classList.remove('hidden');
+    }
+    function closeNewSheetModal() { document.getElementById('modalNewSheet').classList.add('hidden'); }
+    
+    function confirmCreateNewSheet() {
+      const selectedRoute = document.getElementById('nsRoute').value;
+      const selectedTrip = document.getElementById('nsTrip').value;
+      const selectedDate = document.getElementById('nsDate').value;
+      const selectedDriver = document.getElementById('nsDriver').value;
+      const selectedVehicle = document.getElementById('nsVehicle').value;
+
+      if (!selectedRoute) { alert("Please select a route!"); return; }
+
+      if (!appData.sheets) appData.sheets = {};
+      if (!appData.history) appData.history = [];
+
+      const currentKey = getSheetKey();
+      if (appData.sheets[currentKey]) {
+        // Archive the current sheet to history
+        appData.history.unshift({ 
+          key: currentKey, 
+          savedAt: new Date().toLocaleString(), 
+          timestamp: Date.now(),
+          sheet: JSON.parse(JSON.stringify(appData.sheets[currentKey])) 
+        });
+      }
+
+      const masterList = appData.masterShops || [];
+      const matchedShops = masterList.filter(ms => ms.routeKey === selectedRoute).map((ms, idx) => ({
+        id: Date.now() + idx,
+        name: ms.name,
+        address: ms.address || "",
+        inTime: "",
+        outTime: "",
+        invoice: Number(ms.defaultInvoice) || 0,
+        discount: 0,
+        collected: 0,
+        remarks: "",
+        invoiceDoc: null,
+        completed: false
+      }));
+
+      const routeObj = (appData.routes && appData.routes[selectedRoute]) ? appData.routes[selectedRoute] : { name: selectedRoute.toUpperCase() };
+      const targetKey = `${selectedRoute}_${selectedTrip}`;
+
+      appData.sheets[targetKey] = {
+        meta: {
+          routeKey: selectedRoute,
+          routeName: routeObj.name,
+          date: selectedDate,
+          time: "",
+          returnDate: "",
+          returnTime: "",
+          driver: selectedDriver,
+          assistant: "FAHIM",
+          vehicle: selectedVehicle
+        },
+        expenses: { diesel: 0, food: 0, highway: 0, stamp: 0, other: 0, ot: 0 },
+        stops: matchedShops
+      };
+
+      activeRouteKey = selectedRoute;
+      activeTripKey = selectedTrip;
+      appData.lastActiveSheetKey = targetKey;
+
+      saveAppData();
+      closeNewSheetModal();
+
+      const rSelect = document.getElementById('routeDropdown');
+      const tSelect = document.getElementById('tripDropdown');
+      if (rSelect) rSelect.value = selectedRoute;
+      if (tSelect) tSelect.value = selectedTrip;
+
+      renderCurrentSheet();
+      alert(`New Day Sheet Created for ${routeObj.name} with Driver ${selectedDriver}!`);
+    }
+
+    // =========================================================================
+    // ADVANCED HISTORY FILTER SYSTEM (DATE RANGE, ROUTE, DRIVER & DIRECT PDF)
+    // =========================================================================
+    function openHistoryModal() {
+      // Populate route & driver filters
+      const rSelect = document.getElementById('histFilterRoute');
+      const dSelect = document.getElementById('histFilterDriver');
+      rSelect.innerHTML = '<option value="">All Routes</option>';
+      dSelect.innerHTML = '<option value="">All Drivers</option>';
+
+      const routes = appData.routes || initialConfig.routes;
+      Object.values(routes).forEach(r => {
+        rSelect.innerHTML += `<option value="${r.name}">${r.name}</option>`;
+      });
+
+      const drivers = appData.fleetDrivers || initialConfig.fleetDrivers;
+      drivers.forEach(d => {
+        dSelect.innerHTML += `<option value="${d}">${d}</option>`;
+      });
+
+      // Default date filters empty
+      document.getElementById('histFilterFrom').value = '';
+      document.getElementById('histFilterTo').value = '';
+
+      applyHistoryFilters();
+      document.getElementById('modalHistory').classList.remove('hidden');
+    }
+
+    function closeHistoryModal() { 
+      document.getElementById('modalHistory').classList.add('hidden'); 
+    }
+
+    function applyHistoryFilters() {
+      const container = document.getElementById('historyListContainer');
+      container.innerHTML = '';
+
+      const fromVal = document.getElementById('histFilterFrom').value;
+      const toVal = document.getElementById('histFilterTo').value;
+      const routeVal = document.getElementById('histFilterRoute').value.toUpperCase();
+      const driverVal = document.getElementById('histFilterDriver').value.toUpperCase();
+
+      const fromTime = fromVal ? new Date(fromVal).getTime() : null;
+      const toTime = toVal ? new Date(toVal).getTime() + (24 * 60 * 60 * 1000 - 1) : null;
+
+      const history = appData.history || [];
+      const filtered = history.filter(record => {
+        const meta = (record.sheet && record.sheet.meta) ? record.sheet.meta : {};
+        const rName = (meta.routeName || '').toUpperCase();
+        const dName = (meta.driver || '').toUpperCase();
+        const ts = record.timestamp || Date.now();
+
+        if (routeVal && !rName.includes(routeVal)) return false;
+        if (driverVal && !dName.includes(driverVal)) return false;
+        if (fromTime && ts < fromTime) return false;
+        if (toTime && ts > toTime) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-slate-400 font-bold text-xs bg-slate-50 border rounded-2xl">Poruthamana Sheets edhuvum illai (No Matching Sheets Found)</div>`;
+        return;
+      }
+
+      filtered.forEach((record, index) => {
+        const meta = record.sheet.meta || {};
+        const stops = record.sheet.stops || [];
+        let totInv = 0, totCol = 0;
+        stops.forEach(s => { totInv += Number(s.invoice || 0); totCol += Number(s.collected || 0); });
+
+        const card = document.createElement('div');
+        card.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white border border-slate-200 rounded-2xl hover:shadow-md transition gap-2 text-xs";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-black text-indigo-950 text-sm">${meta.routeName || 'ROUTE'}</span>
+              <span class="bg-indigo-50 text-indigo-800 font-bold px-2 py-0.5 rounded-full text-[10px]">${meta.date || ''}</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium mt-0.5">
+              Driver: <strong class="text-slate-800">${meta.driver || '-'}</strong> | 
+              Vehicle: <strong class="text-slate-800">${meta.vehicle || '-'}</strong> | 
+              Saved: <span class="font-mono">${record.savedAt || ''}</span>
+            </p>
+            <p class="text-[10px] font-mono text-slate-600 mt-0.5">
+              Total Sale: <strong>¥${totInv.toLocaleString()}</strong> | Collected: <strong class="text-emerald-700">¥${totCol.toLocaleString()}</strong>
+            </p>
+          </div>
+          <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="downloadHistoryPdfDirect(${index})" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl shadow text-xs flex items-center space-x-1">
+              <i class="fa-solid fa-file-pdf"></i>
+              <span>PDF</span>
+            </button>
+            <button onclick="restoreHistorySheet(${index})" class="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1">
+              <i class="fa-solid fa-eye"></i>
+              <span>View Sheet</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function downloadHistoryPdfDirect(filteredIdx) {
+      const history = appData.history || [];
+      const record = history[filteredIdx];
+      if (!record || !record.sheet) return;
+
+      // Temporarily set sheet to render clean PDF
+      const currentActive = JSON.parse(JSON.stringify(appData.sheets[getSheetKey()] || {}));
+      appData.sheets[getSheetKey()] = JSON.parse(JSON.stringify(record.sheet));
+      renderCurrentSheet();
+
+      // Download clean PDF
+      downloadPdfDirectOnly();
+
+      // Restore active sheet view
+      setTimeout(() => {
+        appData.sheets[getSheetKey()] = currentActive;
+        renderCurrentSheet();
+      }, 1500);
+    }
+
+    function restoreHistorySheet(idx) {
+      const record = appData.history[idx];
+      if (!record || !record.sheet) return;
+      appData.sheets[getSheetKey()] = JSON.parse(JSON.stringify(record.sheet));
+      saveAppData();
+      renderCurrentSheet();
+      closeHistoryModal();
+      alert("Selected Sheet loaded successfully!");
+    }
+
+    // ROUTE, SHOP, FLEET MASTER LOGIC
+    function openRouteManagerModal() { renderRouteList(); document.getElementById('modalRouteManager').classList.remove('hidden'); }
+    function closeRouteManagerModal() { document.getElementById('modalRouteManager').classList.add('hidden'); }
+    function renderRouteList() {
+      const container = document.getElementById('routeManagerList');
+      container.innerHTML = '';
+      const routes = appData.routes || {};
+      Object.values(routes).forEach(route => {
+        container.innerHTML += `<div class="flex justify-between p-2 bg-slate-50 border rounded-xl text-xs font-bold"><span>${route.name}</span><button onclick="deleteRoute('${route.id}')" class="text-rose-600">✕</button></div>`;
+      });
+    }
+    function createNewRoute() {
+      const name = document.getElementById('newRouteName').value.trim().toUpperCase();
+      if (!name) return;
+      const id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      if (!appData.routes) appData.routes = {};
+      appData.routes[id] = { id, name };
+      saveAppData();
+      renderRouteDropdowns();
+      renderRouteList();
+      document.getElementById('newRouteName').value = '';
+    }
+    function deleteRoute(id) {
+      if (confirm("Delete this route?")) {
+        delete appData.routes[id];
+        saveAppData();
+        renderRouteDropdowns();
+        renderRouteList();
+      }
+    }
+
+    function openShopManagerModal() { renderMasterShopList(); document.getElementById('modalShopManager').classList.remove('hidden'); }
+    function closeShopManagerModal() { document.getElementById('modalShopManager').classList.add('hidden'); }
+    function renderMasterShopList() {
+      const container = document.getElementById('shopManagerList');
+      container.innerHTML = '';
+      const mShops = appData.masterShops || [];
+      mShops.forEach(s => {
+        container.innerHTML += `<div class="flex justify-between p-2 bg-slate-50 border rounded-xl text-xs font-bold"><div><span>${s.name}</span><p class="text-[10px] text-slate-500 font-normal">¥${s.defaultInvoice} | ${s.routeKey}</p></div><button onclick="deleteMasterShop(${s.id})" class="text-rose-600">✕</button></div>`;
+      });
+    }
+    function createMasterShop() {
+      const name = document.getElementById('mShopName').value.trim();
+      const address = document.getElementById('mShopAddress').value.trim();
+      const invoice = Number(document.getElementById('mShopInvoice').value) || 0;
+      const routeKey = document.getElementById('mShopRouteKey').value;
+      if (!name) return;
+      if (!appData.masterShops) appData.masterShops = [];
+      appData.masterShops.push({ id: Date.now(), name, address, defaultInvoice: invoice, routeKey, invoiceDoc: null });
+      saveAppData();
+      renderMasterShopList();
+      document.getElementById('mShopName').value = '';
+      document.getElementById('mShopInvoice').value = '';
+    }
+    function deleteMasterShop(id) {
+      if (confirm("Delete shop?")) {
+        appData.masterShops = appData.masterShops.filter(s => s.id !== id);
+        saveAppData();
+        renderMasterShopList();
+      }
+    }
+
+    function openFleetModal() { renderFleetList(); document.getElementById('modalFleet').classList.remove('hidden'); }
+    function closeFleetModal() { document.getElementById('modalFleet').classList.add('hidden'); }
+    function renderFleetList() {
+      const dCont = document.getElementById('fleetDriverList');
+      const vCont = document.getElementById('fleetVehicleList');
+      dCont.innerHTML = ''; vCont.innerHTML = '';
+      const drivers = appData.fleetDrivers || [];
+      drivers.forEach((d, idx) => {
+        dCont.innerHTML += `<div class="flex justify-between p-1 bg-white border rounded text-xs font-bold"><span>${d}</span><button onclick="removeFleetDriver(${idx})" class="text-rose-600">✕</button></div>`;
+      });
+      const vehicles = appData.fleetVehicles || [];
+      vehicles.forEach((v, idx) => {
+        vCont.innerHTML += `<div class="flex justify-between p-1 bg-white border rounded text-xs font-bold"><span>${v}</span><button onclick="removeFleetVehicle(${idx})" class="text-rose-600">✕</button></div>`;
+      });
+    }
+    function addFleetDriver() {
+      const name = document.getElementById('newFleetDriverName').value.trim().toUpperCase();
+      if (name && !appData.fleetDrivers.includes(name)) { 
+        if (!appData.fleetDrivers) appData.fleetDrivers = [];
+        appData.fleetDrivers.push(name); saveAppData(); renderFleetDropdowns(); renderFleetList(); 
+      }
+      document.getElementById('newFleetDriverName').value = '';
+    }
+    function removeFleetDriver(idx) {
+      if (appData.fleetDrivers.length > 1) { appData.fleetDrivers.splice(idx, 1); saveAppData(); renderFleetDropdowns(); renderFleetList(); }
+    }
+    function addFleetVehicle() {
+      const name = document.getElementById('newFleetVehicleName').value.trim().toUpperCase();
+      if (name && !appData.fleetVehicles.includes(name)) { 
+        if (!appData.fleetVehicles) appData.fleetVehicles = [];
+        appData.fleetVehicles.push(name); saveAppData(); renderFleetDropdowns(); renderFleetList(); 
+      }
+      document.getElementById('newFleetVehicleName').value = '';
+    }
+    function removeFleetVehicle(idx) {
+      if (appData.fleetVehicles.length > 1) { appData.fleetVehicles.splice(idx, 1); saveAppData(); renderFleetDropdowns(); renderFleetList(); }
+    }
+
+    function openCompanyProfileModal() {
+      const c = appData.company || initialConfig.company;
+      document.getElementById('cpName').value = c.name;
+      document.getElementById('cpZip').value = c.zip;
+      document.getElementById('cpAddress').value = c.address;
+      document.getElementById('cpPhone').value = c.phone;
+      document.getElementById('modalCompanyProfile').classList.remove('hidden');
+    }
+    function closeCompanyProfileModal() { document.getElementById('modalCompanyProfile').classList.add('hidden'); }
+    function handleLogoUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) { 
+          if (!appData.company) appData.company = initialConfig.company;
+          appData.company.logo = evt.target.result; 
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    function saveCompanyProfile() {
+      if (!appData.company) appData.company = {};
+      appData.company.name = document.getElementById('cpName').value.trim();
+      appData.company.zip = document.getElementById('cpZip').value.trim();
+      appData.company.address = document.getElementById('cpAddress').value.trim();
+      appData.company.phone = document.getElementById('cpPhone').value.trim();
+      saveAppData();
+      renderCompanyHeader();
+      closeCompanyProfileModal();
+    }
+  </script>
+</body>
+</html>
